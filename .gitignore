@@ -1,9 +1,7 @@
-npm-debug.log*
-
 .DS_Store
 node_modules/
+package-lock.json
 coverage/
-
-ISSUE_DATA.json
-
-*.swp
+.nyc_output/
+yarn.lock
+!test/fixtures/plugins/node_modules/

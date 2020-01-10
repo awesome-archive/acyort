@@ -1,83 +1,27 @@
 #!/usr/bin/env node
 
-const program = require('commander')
-const fs = require('fs-extra')
-const path = require('path')
-const pkg = require('../package.json')
-const Logger = require('../lib/logger/')
+const logger = require('../lib/logger')
+const parser = require('../lib/cli/parser')
+const acyort = require('../lib')
+const getConfig = require('../lib/config/get')
 
-const config = path.join(process.cwd(), 'config.yml')
-const ignores = 'Thumbs.db .DS_Store *.swp themes/ ISSUE_DATA.json'.split(' ').join('\n')
-const commands = 'version init build server clean'
-const keeps = 'themes config.yml CNAME README.md LICENSE ISSUE_DATA.json favicon.ico'
-const logger = new Logger()
+const argv = process.argv.slice(2)
+const base = process.cwd()
+const ignores = ['init', '-h', '--help', '-v', '--version']
 
-program
-.allowUnknownOption()
-.usage('<command>')
+try {
+  const config = getConfig(base)
 
-program
-.command('init [folder]')
-.description('Create new blog')
-.action((folder = '') => {
-  try {
-    if (fs.existsSync(config)) {
-      fs.copySync(config, path.join(process.cwd(), 'config.bak.yml'))
-    }
-
-    fs.copySync(path.resolve(__dirname, '../assets'), path.join(process.cwd(), folder))
-    fs.outputFileSync(path.join(process.cwd(), folder, '.gitignore'), ignores)
-
-    logger.success('Configure "config.yml" to start your blog')
-  } catch (e) {
-    logger.error(e)
+  if (config) {
+    const { workflow } = acyort(config)
+    parser(argv, {
+      workflow: { ...workflow, register: undefined },
+    })
+  } else if (argv[0] && !ignores.includes(argv[0])) {
+    logger.error('Cannot find `config.yml` or configuration error')
+  } else {
+    parser(argv)
   }
-})
-
-program
-.command('version')
-.description('Display AcyOrt version')
-.action(() => logger.info(pkg.version))
-
-program
-.command('server [port]')
-.description('Create a local test server')
-.action((port = 2222) => {
-  const Server = require('../lib/server/')
-  const server = new Server(port)
-  server._()
-})
-
-program
-.command('build')
-.description('Generate the files')
-.action(() => {
-  const Acyort = require('../lib/acyort')
-  const acyort = new Acyort()
-  acyort._()
-})
-
-program
-.command('clean')
-.description('Remove all the generated files')
-.action(() => {
-  let files = fs.readdirSync(process.cwd())
-
-  files = files.filter((file) => {
-    if ((/(^|\/)\.[^\/\.]/g).test(file)) {
-      return false
-    }
-    if (keeps.indexOf(file) > -1) {
-      return false
-    }
-    return true
-  })
-
-  files.forEach(file => fs.removeSync(file))
-})
-
-program.parse(process.argv)
-
-if (!program.args.length || commands.indexOf(process.argv[2]) === -1) {
-  program.help()
+} catch (e) {
+  logger.error(e)
 }

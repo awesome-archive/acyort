@@ -1,104 +1,20 @@
-# site
-# default "AcyOrt", "A Node.js blog tool powered by GitHub."
-title:
-description:
-
-# timezone
-# the timezone of your website
-# example: America/New_York, Japan, or UTC
-# default is local system timezone
-timezone:
-
-# rss
-# set false if no need rss output
-# default "rss.xml"
-rss:
-
-# site url. you can set as 'http://yoursite.com/child' if necessary
-# please add 'http://' or 'https://'
-# default "https://acyortjs.github.io"
+# url of website. format like http://<domain>/<path> or https://<domain>
 url:
 
-# language
-# base on the theme support
-# default "en"
-language:
+# website template
+template: ccc45
 
-# theme
-# default "ccc45"
-theme:
+# plugins, npm modules or script file name
+plugins:
+  - script.js
+  # - xxx module
 
-# pagination
-# set 0 if no need paging
-# default 10, 30
-per_page:
-archives_per_page:
+# output, where static site files located
+public: /
 
-# thumbnail mode
-# 1: use the first image as thumbnail and remove the image
-# 2: use the first image as thumbnail but not remove the image
-# default 2
-thumbnail_mode:
+# timezone, website timezone. use machine setting by default
+# example: `America/New_York`, `Japan`, `UTC`, or `Asia/Shanghai`
+timezone:
 
-# menu
-menu:
-  # archives: /archives/
-  # categories: /category/
-  # tags: /tag/
-
-# category
-# default "uncategorized"
-default_category:
-
-# html output directory or child directory e.g. 'child'
-# default "/"
-public_dir:
-
-# category directory
-# default "category"
-category_dir:
-
-# tag directory
-# default "tag"
-tag_dir:
-
-# post directory
-# default "posts"
-post_dir:
-
-# archives directory
-# default "archives"
-archives_dir:
-
-# site content source
-# your github user/repository
-# default "acyortjs", "acyortjs.github.io"
-user:
-repository:
-
-# post authors
-# github username
-authors:
-#  - author0
-#  - author1
-
-# gitHub access token(optional)
-# token should be separated by '#' if you push this file to github
-# token: s#d46a6d65aasd8sdbn
-
-# json output
-# boolean or string
-# you can set json output path
-# default false
-json:
-
-# dev mode
-# default false
-dev:
-
-# other
-# customize some settings if necessary
-
-# disqus:
-# keywords:
-# favicon:
+# language of website
+language: en
